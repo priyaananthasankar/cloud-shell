@@ -119,8 +119,8 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/surajssd/cloudshell/tools
         tags: |
-          type=raw,value=latest
           type=raw,value=${{ steps.tag.outputs.image_tag }}
+          type=raw,value=latest,enable=${{ env.CLOUDSHELL_BRANCH == 'master' && env.CLOUDSHELL_REPO == 'Azure/CloudShell' }}
 
     - name: Tools image
       uses: docker/build-push-action@v6
