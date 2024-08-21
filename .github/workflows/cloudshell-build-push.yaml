@@ -88,8 +88,8 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/surajssd/cloudshell/base
         tags: |
-          type=raw,value=latest
           type=raw,value=${{ steps.tag.outputs.image_tag }}
+          type=raw,value=latest,enable=${{ inputs.cloudshell-branch == 'master' && inputs.cloudshell-repository == 'Azure/CloudShell' }}
 
     - name: Base image
       uses: docker/build-push-action@v6
