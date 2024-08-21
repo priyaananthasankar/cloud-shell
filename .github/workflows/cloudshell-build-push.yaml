@@ -23,6 +23,26 @@ jobs:
       packages: write
 
     steps:
+    # Set up trivy.
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: '16384'
+        temp-reserve-mb: '100'
+        swap-size-mb: '8192'
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+
+    - name: Create temporary trivy directories
+      run: |
+        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp
+        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp/.cache
+        echo "TMPDIR=$GITHUB_WORKSPACE/trivy-tmp" >> $GITHUB_ENV
+        echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-tmp/.cache" >> $GITHUB_ENV
+
+    # Download code.
     - name: Checkout code
       uses: actions/checkout@v4
       with:
@@ -43,6 +63,8 @@ jobs:
       id: tag
       run: |
         cd CloudShell
+        # Generate a tag based on the commit hash and current timestamp.
+        # It is possible that the master may not change, so timestamp ensures that the tag is unique.
         echo "image_tag=$(git rev-parse --short HEAD)-$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
 
     - name: Extract metadata labels for base image
@@ -63,6 +85,15 @@ jobs:
         tags: ${{ steps.base-meta.outputs.tags }}
         labels: ${{ steps.base-meta.outputs.labels }}
 
+    - name: Scan base image with Trivy
+      id: trivy-base-scan
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        scan-type: 'image'
+        image-ref: ${{ env.REGISTRY }}/surajssd/cloudshell/base:${{ steps.tag.outputs.image_tag }}
+        scanners: 'vuln,config'
+        severity: 'HIGH,CRITICAL'
+
     - name: Extract metadata labels for tools image
       id: tools-meta
       uses: docker/metadata-action@v5
@@ -78,6 +109,15 @@ jobs:
         context: CloudShell
         file: CloudShell/linux/tools.Dockerfile
         push: true
-        build-args: IMAGE_LOCATION=${{ steps.base-meta.outputs.tags }}
+        build-args: IMAGE_LOCATION=${{ env.REGISTRY }}/surajssd/cloudshell/base:${{ steps.tag.outputs.image_tag }}
         tags: ${{ steps.tools-meta.outputs.tags }}
         labels: ${{ steps.tools-meta.outputs.labels }}
+
+    - name: Scan base image with Trivy
+      id: trivy-tools-scan
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        scan-type: 'image'
+        image-ref: ${{ env.REGISTRY }}/surajssd/cloudshell/tools:${{ steps.tag.outputs.image_tag }}
+        scanners: 'vuln,config'
+        severity: 'HIGH,CRITICAL'
