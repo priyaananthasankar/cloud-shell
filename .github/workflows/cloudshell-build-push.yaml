@@ -49,7 +49,7 @@ jobs:
       id: base-meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/base
+        images: ${{ env.REGISTRY }}/surajssd/cloudshell/base
         tags: |
           type=raw,value=latest
           type=raw,value=${{ steps.tag.outputs.image_tag }}
@@ -67,7 +67,7 @@ jobs:
       id: tools-meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/tools
+        images: ${{ env.REGISTRY }}/surajssd/cloudshell/tools
         tags: |
           type=raw,value=latest
           type=raw,value=${{ steps.tag.outputs.image_tag }}
