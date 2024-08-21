@@ -34,6 +34,8 @@ jobs:
     steps:
     # Set up trivy.
     - name: Maximize build space
+      # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
+      if: ${{ github.event.inputs.cloudshell-branch == 'master' && github.event.inputs.cloudshell-repository == 'Azure/CloudShell' }}
       uses: easimon/maximize-build-space@master
       with:
         root-reserve-mb: '16384'
@@ -56,6 +58,8 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Create temporary trivy directories
+      # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
+      if: ${{ github.event.inputs.cloudshell-branch == 'master' && github.event.inputs.cloudshell-repository == 'Azure/CloudShell' }}
       run: |
         sudo mkdir $GITHUB_WORKSPACE/trivy-tmp
         sudo mkdir $GITHUB_WORKSPACE/trivy-tmp/.cache
@@ -97,6 +101,8 @@ jobs:
         labels: ${{ steps.base-meta.outputs.labels }}
 
     - name: Scan base image with Trivy
+      # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
+      if: ${{ github.event.inputs.cloudshell-branch == 'master' && github.event.inputs.cloudshell-repository == 'Azure/CloudShell' }}
       id: trivy-base-scan
       uses: aquasecurity/trivy-action@0.20.0
       with:
@@ -125,6 +131,8 @@ jobs:
         labels: ${{ steps.tools-meta.outputs.labels }}
 
     - name: Scan tools image with Trivy
+      # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
+      if: ${{ github.event.inputs.cloudshell-branch == 'master' && github.event.inputs.cloudshell-repository == 'Azure/CloudShell' }}
       id: trivy-tools-scan
       uses: aquasecurity/trivy-action@0.20.0
       with:
