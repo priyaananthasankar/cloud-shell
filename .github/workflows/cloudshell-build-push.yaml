@@ -5,9 +5,11 @@ on:
     branches:
       - main
   schedule:
-    # Run every six hours
-    - cron: '0 */6 * * *'
-
+    # Run at 5am and 12pm PDT on weekdays
+    # 5am PDT is 12pm UTC
+    - cron: '0 12 * * 1-5'
+    # 12pm PDT is 7pm UTC
+    - cron: '0 19 * * 1-5'
   workflow_dispatch:
 
 env:
