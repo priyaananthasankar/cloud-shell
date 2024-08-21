@@ -16,6 +16,10 @@ on:
         type: string
         description: "CloudShell Branch to use for building images"
         default: "master"
+      cloudshell-repository:
+        type: string
+        description: "CloudShell Repository to use for building images"
+        default: "Azure/CloudShell"
 
 env:
   REGISTRY: ghcr.io
@@ -44,7 +48,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        repository: Azure/CloudShell
+        repository: "${{ inputs.cloudshell-repository }}"
         path: CloudShell
         ref: ${{ inputs.cloudshell-branch }}
 
