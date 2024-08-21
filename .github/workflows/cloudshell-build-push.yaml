@@ -41,7 +41,7 @@ jobs:
       id: tag
       run: |
         cd CloudShell
-        echo "image_tag=$(git rev-parse --abbrev-ref HEAD)-$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
+        echo "image_tag=$(git rev-parse --short HEAD)-$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
 
     - name: Extract metadata labels for base image
       id: base-meta
