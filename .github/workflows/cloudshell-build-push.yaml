@@ -35,13 +35,6 @@ jobs:
         remove-haskell: 'true'
         remove-codeql: 'true'
 
-    - name: Create temporary trivy directories
-      run: |
-        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp
-        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp/.cache
-        echo "TMPDIR=$GITHUB_WORKSPACE/trivy-tmp" >> $GITHUB_ENV
-        echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-tmp/.cache" >> $GITHUB_ENV
-
     # Download code.
     - name: Checkout code
       uses: actions/checkout@v4
@@ -51,6 +44,13 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
+    - name: Create temporary trivy directories
+      run: |
+        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp
+        sudo mkdir $GITHUB_WORKSPACE/trivy-tmp/.cache
+        echo "TMPDIR=$GITHUB_WORKSPACE/trivy-tmp" >> $GITHUB_ENV
+        echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-tmp/.cache" >> $GITHUB_ENV
 
     - name: Login to GHCR
       uses: docker/login-action@v3
