@@ -113,7 +113,7 @@ jobs:
         tags: ${{ steps.tools-meta.outputs.tags }}
         labels: ${{ steps.tools-meta.outputs.labels }}
 
-    - name: Scan base image with Trivy
+    - name: Scan tools image with Trivy
       id: trivy-tools-scan
       uses: aquasecurity/trivy-action@0.20.0
       with:
