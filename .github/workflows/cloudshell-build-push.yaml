@@ -129,7 +129,7 @@ jobs:
         file: CloudShell/linux/tools.Dockerfile
         push: true
         build-args: IMAGE_LOCATION=${{ fromJSON(steps.base-meta.outputs.json).tags[0] }}
-        tags: ${{ fromJSON(steps.tools-meta.outputs.json).tags[0] }}
+        tags: ${{ steps.tools-meta.outputs.tags }}
         labels: ${{ steps.tools-meta.outputs.labels }}
 
     - name: Scan tools image with Trivy
