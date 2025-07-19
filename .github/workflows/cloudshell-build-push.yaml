@@ -4,16 +4,13 @@ on:
   push:
     branches:
       - main
-  schedule:
-    # Run at 5am and 12pm PDT on weekdays
-    # 5am PDT is 12pm UTC
-    - cron: '0 12 * * 1-5'
+
   workflow_dispatch:
     inputs:
       cloudshell-branch:
         type: string
         description: "CloudShell Branch to use for building images"
-        default: "master"
+        default: "singleuserinstall"
       cloudshell-repository:
         type: string
         description: "CloudShell Repository to use for building images"
@@ -86,7 +83,7 @@ jobs:
       id: base-meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/surajssd/cloudshell/base
+        images: ${{ env.REGISTRY }}/priyaananthasankar/cloudshell/base
         tags: |
           type=raw,value=${{ steps.tag.outputs.image_tag }}
           type=raw,value=latest,enable=${{ env.CLOUDSHELL_BRANCH == 'master' && env.CLOUDSHELL_REPO == 'Azure/CloudShell' }}
@@ -115,7 +112,7 @@ jobs:
       id: tools-meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/surajssd/cloudshell/tools
+        images: ${{ env.REGISTRY }}/priyaananthasankar/cloudshell/tools
         tags: |
           type=raw,value=${{ steps.tag.outputs.image_tag }}
           type=raw,value=latest,enable=${{ env.CLOUDSHELL_BRANCH == 'master' && env.CLOUDSHELL_REPO == 'Azure/CloudShell' }}
