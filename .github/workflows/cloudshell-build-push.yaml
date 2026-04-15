@@ -101,7 +101,7 @@ jobs:
       # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
       if: ${{ env.CLOUDSHELL_BRANCH == 'master' && env.CLOUDSHELL_REPO == 'Azure/CloudShell' }}
       id: trivy-base-scan
-      uses: aquasecurity/trivy-action@0.20.0
+      uses: aquasecurity/trivy-action@v0.35.0
       with:
         scan-type: 'image'
         image-ref: ${{ fromJSON(steps.base-meta.outputs.json).tags[0] }}
@@ -131,7 +131,7 @@ jobs:
       # Skip this step if the cloudshell-branch is not master and the cloudshell-repository is not Azure/CloudShell.
       if: ${{ env.CLOUDSHELL_BRANCH == 'master' && env.CLOUDSHELL_REPO == 'Azure/CloudShell' }}
       id: trivy-tools-scan
-      uses: aquasecurity/trivy-action@0.20.0
+      uses: aquasecurity/trivy-action@v0.35.0
       with:
         scan-type: 'image'
         image-ref: ${{ fromJSON(steps.tools-meta.outputs.json).tags[0] }}
